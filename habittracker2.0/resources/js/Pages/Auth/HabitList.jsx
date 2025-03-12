@@ -30,7 +30,6 @@ const HabitList = ({ habitsList }) => {
             
         }
        
-        // setHabits((previousState) => previousState.map((habit) => habit.id === id ? { ...habit, completed: !habit.completed } : habit))
     }
 
     const toggleDelete = async (id) => {
