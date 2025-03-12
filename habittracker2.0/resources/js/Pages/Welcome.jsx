@@ -19,8 +19,9 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
             <Default>
                 <div className={styles.Container}>
                     <div className='text-center'>
-                        <h1 className='font-bold text-5xl'>Habits Tracker Application</h1>
-                        <p>This Application is Used for Track Your Daily Habits</p>
+                        <button className={`${styles.habits}`}>Daily Habits</button>
+                        <h1 className='text-violet-800 mb-5 font-bold text-5xl'>Habits Tracker Application</h1>
+                        <p className='text-violet-500'>This Application is Used for Track Your Daily Habits</p>
                     </div>
                 </div>
             </Default>

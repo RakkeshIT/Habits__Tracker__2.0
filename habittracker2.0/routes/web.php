@@ -19,6 +19,8 @@ Route::middleware('auth')->group(function(){
     Route::post('/habit', [habitController::class, 'store'])->name('habit.store');
     Route::get('/habitlist', [habitController::class, 'list'])->name('habit.list');
     Route::get('/habitchart', [habitController::class, 'chart'])->name('habit.chart');
+    Route::delete('/habit/{id}', [habitController::class, 'deletehabit']);
+    Route::patch('/habitcomplete/{id}/toggle-complete', [habitController::class, 'togglecompleted']);
 });
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

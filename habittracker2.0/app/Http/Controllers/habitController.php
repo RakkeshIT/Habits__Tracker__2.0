@@ -47,4 +47,18 @@ class habitController extends Controller
         $habits = Habits::where('user_id', $user->id)->get();
         return Inertia::render('Auth/Charts', ['habitsList' => $habits]);
     }
+
+    public function togglecompleted($id ){
+        $habit = Habits::findOrFail($id);
+        $habit->completed = !$habit->completed;
+        $habit->save();
+
+        return response()->json(['success' => true, 'completed' => $habit->completed]);
+    }
+    public function deletehabit($id ){
+        $habit = Habits::find($id);
+        $habit->delete();
+
+        return response()->json();
+    }
 }

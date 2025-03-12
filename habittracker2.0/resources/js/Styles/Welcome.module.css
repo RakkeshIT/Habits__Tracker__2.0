@@ -5,3 +5,23 @@
     align-items: center;
     justify-content: center;
 }
+
+.habits{
+    background-image: linear-gradient(to right, #902eeb,violet);
+    padding: 3px 25px;
+    border-radius: 20px;
+    border: 1px solid black;
+    font-weight: 600;
+    box-shadow: 0 0 10px #902eeb;
+    margin-bottom: 10px;
+    animation: habits 1s infinite alternate;
+}
+@keyframes habits {
+    0%{
+        box-shadow: 0 0 10px #902eeb;
+    }
+    100%{
+        box-shadow: 0 0 10px #902eeb,
+    0 0 12px #902eeb, 0 0 22px #902eeb;
+    }
+}

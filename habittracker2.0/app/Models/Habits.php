@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Habits extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'name', 'description', 'start_date', 'end_date'];
+    protected $fillable = ['user_id', 'name', 'description', 'start_date', 'end_date','completed'];
 
     // define use relationship
 

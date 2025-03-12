@@ -40,13 +40,13 @@ export default function AuthenticatedLayout({ header, children }) {
                                     href={route('habit.list')}
                                     active={route().current('habit.list')}
                                 >
-                                    CreateHabit
+                                    My Habits
                                 </NavLink>
                                 <NavLink
                                     href={route('habit.chart')}
                                     active={route().current('habit.chart')}
                                 >
-                                    CreateChart
+                                    My Monthly Chart Visual
                                 </NavLink>
                             </div>
                         </div>

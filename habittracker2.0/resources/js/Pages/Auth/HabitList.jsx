@@ -5,27 +5,61 @@ import React, { useEffect, useState } from 'react'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import { motion } from 'framer-motion'
+import axios from 'axios'
 
 const HabitList = ({ habitsList }) => {
     const [habits, setHabits] = useState(habitsList);
-    const [filtedHabits, setFiltedHabits] = useState([]);
     const [selectedDate, setSelectedDate] = useState(null);
     const [showAll, setShowAll] = useState(false);
-    const toggleComplete = (id) => {
-        setHabits((previousState) => previousState.map((habit) => habit.id === id ? { ...habit, completed: !habit.completed } : habit))
+
+    const toggleComplete =async (id) => {
+        try {
+            const response = await axios.patch(`/habitcomplete/${id}/toggle-complete`)
+           if(response.status === 200){
+            const updateHabit = habits.map((pre) => pre.id === id ? { ...pre, completed: !response.data.completed } : pre)
+            setHabits(updateHabit)
+            console.log("Habit is Completed");
+            
+           }else{
+            console.log("Habit is Not Completed");
+            
+           }
+          
+        } catch (error) {
+            console.log("Something Error", error);
+            
+        }
+       
+        // setHabits((previousState) => previousState.map((habit) => habit.id === id ? { ...habit, completed: !habit.completed } : habit))
     }
+
+    const toggleDelete = async (id) => {
+        try {
+            const response = await axios.delete(`/habit/${id}`)
+            if(response.status === 200) {
+                setHabits(habits.filter((habit) => habit.id !== id));
+                console.log("Deleted");
+            }else{
+                console.log("Habit Not Deleted");
+                
+            }
+        } catch (error) {
+            console.log("Some thing Error", error);
+            
+        }
+    }
+
+
     const formateDate = selectedDate ? new Date(selectedDate).toLocaleDateString("en-CA") : null;
 
+    const filterHabits = showAll ? habits : habits.filter(
+        (habit) => {
+            const habitDate = habit.created_at ? habit.created_at.split('T')[0] : '';
+            return habitDate === formateDate
+        })
+    
     
 
-    useEffect(() => {
-        const filterHabits = showAll ? habits : habits.filter(
-            (habit) => {
-                const habitDate = habit.created_at ? habit.created_at.split('T')[0] : '';
-                return habitDate === formateDate
-            })
-       setFiltedHabits(filterHabits)
-    }, [selectedDate,habits]);
     return (
         <AuthenticatedLayout>
             <Head title='My Habits' />
@@ -51,7 +85,7 @@ const HabitList = ({ habitsList }) => {
                                     const formatedDate = date.toLocaleDateString("en-CA");
                                     return formatedDate === formateDate
                                         ? "bg-blue-500 text-white rounded-lg"
-                                        : ""
+                                        : ''
                                 }
                                 }
 
@@ -78,8 +112,8 @@ const HabitList = ({ habitsList }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filtedHabits.length > 0 ? (
-                                filtedHabits.map((habit, index) => (
+                            {filterHabits.length > 0 ? (
+                                filterHabits.map((habit, index) => (
                                     <tr key={habit.id} className={`border-b hover:bg-gray-100 ${habit.completed ? 'text-green-500 line-through' : ''}`}>
                                         <td className={`px-4 py-2 ${habit.completed ? 'text-decoration-line-through' : ''}`}>{index + 1}</td>
                                         <td className="px-4 py-2">{habit.name}</td>
@@ -98,6 +132,7 @@ const HabitList = ({ habitsList }) => {
                                         <td className="px-4 py-2 text-center">
                                             <button
                                                 className="p-2 text-red-500 hover:text-red-700"
+                                                onClick={() => toggleDelete(habit.id)}
                                             >
                                                 <Trash2 size={22} />
                                             </button>
