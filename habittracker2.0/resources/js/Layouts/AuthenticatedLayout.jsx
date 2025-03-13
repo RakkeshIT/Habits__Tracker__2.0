@@ -1,13 +1,19 @@
+'use client'
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import Coin from '@/../assets/coin.gif'
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 export default function AuthenticatedLayout({ header, children }) {
+    const [coins, setScoins] = useState(0);
     const user = usePage().props.auth.user;
-
+    useEffect(() => {
+        setScoins(user.credits)
+    }, [coins]);
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
@@ -48,11 +54,15 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     My Monthly Chart Visual
                                 </NavLink>
+                                
+
+                                
+
                             </div>
                         </div>
 
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                            <div className="relative ms-3">
+                            <div className="relative ms-3 flex">
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md">
@@ -93,6 +103,11 @@ export default function AuthenticatedLayout({ header, children }) {
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
+
+                                <div className='inline-flex'>
+                                    <img src={Coin} className='w-8 h-8' />
+                                    <span className='m-1 text-xl font-semibold text-sky-500'>{coins}</span>
+                                </div>
                             </div>
                         </div>
 

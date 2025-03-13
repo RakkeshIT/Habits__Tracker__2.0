@@ -20,8 +20,12 @@ Route::middleware('auth')->group(function(){
     Route::get('/habitlist', [habitController::class, 'list'])->name('habit.list');
     Route::get('/habitchart', [habitController::class, 'chart'])->name('habit.chart');
     Route::delete('/habit/{id}', [habitController::class, 'deletehabit']);
-    Route::patch('/habitcomplete/{id}/toggle-complete', [habitController::class, 'togglecompleted']);
+    Route::post('/habitcomplete/{id}/toggle-complete', [habitController::class, 'togglecompleted'])->middleware('auth');
 });
+
+Route::get('/users/credits', function() {
+    return response()->json(['credits' => auth()->user()->credits]);
+})->middleware('auth');
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

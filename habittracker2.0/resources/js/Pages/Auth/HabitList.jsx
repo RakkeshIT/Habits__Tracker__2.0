@@ -14,9 +14,11 @@ const HabitList = ({ habitsList }) => {
 
     const toggleComplete =async (id) => {
         try {
-            const response = await axios.patch(`/habitcomplete/${id}/toggle-complete`)
+            const findId = habits.find(habit => habit.id === id);
+            const updateState = !findId.completed
+            const response = await axios.post(`/habitcomplete/${id}/toggle-complete`, {completed: updateState})
            if(response.status === 200){
-            const updateHabit = habits.map((pre) => pre.id === id ? { ...pre, completed: !response.data.completed } : pre)
+            const updateHabit = habits.map((pre) => pre.id === id ? { ...pre, completed: updateState} : pre)
             setHabits(updateHabit)
             console.log("Habit is Completed");
             
@@ -113,7 +115,7 @@ const HabitList = ({ habitsList }) => {
                         <tbody>
                             {filterHabits.length > 0 ? (
                                 filterHabits.map((habit, index) => (
-                                    <tr key={habit.id} className={`border-b hover:bg-gray-100 ${habit.completed ? 'text-green-500 line-through' : ''}`}>
+                                    <tr key={habit.id} className={`border-b hover:bg-gray-100 ${habit.completed ? 'text-sky-500 line-through' : ''}`}>
                                         <td className={`px-4 py-2 ${habit.completed ? 'text-decoration-line-through' : ''}`}>{index + 1}</td>
                                         <td className="px-4 py-2">{habit.name}</td>
                                         <td className="px-4 py-2">{habit.description}</td>
@@ -123,7 +125,7 @@ const HabitList = ({ habitsList }) => {
                                         <td className="px-4 py-2 text-center">
                                             <button
                                                 onClick={() => toggleComplete(habit.id)}
-                                                className={`p-2 rounded-ful ${habit.completed ? 'text-green-500' : 'text-gray-400'}`}
+        
                                             >
                                                 <CheckCircle size={22} />
                                             </button>

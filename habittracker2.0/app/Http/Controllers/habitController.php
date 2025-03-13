@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Habits;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -48,17 +49,27 @@ class habitController extends Controller
         return Inertia::render('Auth/Charts', ['habitsList' => $habits]);
     }
 
-    public function togglecompleted($id ){
+    public function togglecompleted(Request $request, $id ){
         $habit = Habits::findOrFail($id);
+        $users = auth()->user();
         $habit->completed = !$habit->completed;
+        if($habit->completed) {
+            $users->increment('credits', 1);
+        }else {
+            $users -> decrement('credits', 1);
+        }
         $habit->save();
-
-        return response()->json(['success' => true, 'completed' => $habit->completed]);
+        return response()->json(['success' => true, 'completed' => $habit->completed, 'credits' => $users->credits]);
     }
     public function deletehabit($id ){
         $habit = Habits::find($id);
+        if($habit->completed){
+            $user = auth()->user();
+            $user->credits -= 1;
+            $user->save();
+        }
         $habit->delete();
 
-        return response()->json();
+        return response()->json(['credits' => $user->credits]);
     }
 }
